@@ -8,6 +8,9 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import pages.AmazonPage;
 import utilities.Driver;
+import utilities.ReusableMethods;
+
+import java.util.Arrays;
 
 public class C01_SoftAssert {
     @Test
@@ -23,29 +26,43 @@ public class C01_SoftAssert {
         softAssert.assertTrue(actualURL.contains(expectedURLKelime));
 
         // Nutella aratın
-        AmazonPage amazonpage=new AmazonPage();
-        amazonpage.amazonAramaKutusu.sendKeys("Nutella"+Keys.ENTER);
+        AmazonPage amazonPage=new AmazonPage();
+        amazonPage.amazonAramaKutusu.sendKeys("Nutella"+Keys.ENTER);
+
 
         //arama sonuclarının nutella içerdiğini doğrulayın
 
-//        String aramaSonucYazisi=amazonPage.aramaSonucuElementi.getText();
-//        softAsset.assertTrue(aramaSonucYazisi.contains("Nutella"),"Arama sonucu Nutella içermiyor");
-//        //Java aratın
-//        amazonPage.amazonAramaKutusu.clear();
-//        amazonPage.amazonAramaKutusu.sendKeys("Java"+Keys.ENTER);
-//        //arama sonuclarının 1000'den fazla oldugunu dogrulayın
-//        System.out.println(amazonPage.aramaSonucuElementi.getText());
-//        aramaSonucYazisi=amazonPage.aramaSonucuElementi.getText();
-//        String[] sonucArr=aramaSonucYazisi.split(" ");
-//        System.out.println(Arrays.toString(sonucArr));
-//        String javaSonucSayisiStr=sonucArr[3];
-//        javaSonucSayisiStr=javaSonucSayisiStr.replaceAll("\\W","");//6000
-//        int sonucSayisiInt=Integer.parseInt(javaSonucSayisiStr);
-//        softAsset.assertTrue(sonucSayisiInt>1000,"Arama sonucu 1000'den çok değil");
+        String aramaSonucYazisi=amazonPage.aramaSonucuElementi.getText().trim();
+
+        softAssert.assertTrue(aramaSonucYazisi.contains("Nutella"),"Arama sonucu Nutella içermiyor");
+
+        //Java aratın
+        amazonPage.amazonAramaKutusu.clear();
+        amazonPage.amazonAramaKutusu.sendKeys("Java"+Keys.ENTER);
+
+        ReusableMethods.bekle(3);
+
+
+        //arama sonuclarının 1000'den fazla oldugunu dogrulayın
+        System.out.println(amazonPage.aramaSonucuElementi.getText());  //1-48 of over 7,000 results for "Java"
+
+        aramaSonucYazisi=amazonPage.aramaSonucuElementi.getText();   //1-48 of over 7,000 results for "Java"
+
+        String[] sonucArr=aramaSonucYazisi.split(" ");
+
+        System.out.println(Arrays.toString(sonucArr));   //[1-48, of, over, 7,000, results, for, "Java"]
+        //We need to take 3rd index to get the number 7000
+        String javaSonucSayisiStr=sonucArr[3];  //7000
+
+        javaSonucSayisiStr=javaSonucSayisiStr.replaceAll("\\W","");     //7000   ve su an bu String
+
+        int sonucSayisiInt=Integer.parseInt(javaSonucSayisiStr);   // boylece sonuc sayisini Int yaptik
+
+        softAssert.assertTrue(sonucSayisiInt>1000,"Arama sonucu 1000'den çok değil");
 
 
         softAssert.assertAll();
-        Driver.closeDriver();
+        //Driver.closeDriver();
 
 
 

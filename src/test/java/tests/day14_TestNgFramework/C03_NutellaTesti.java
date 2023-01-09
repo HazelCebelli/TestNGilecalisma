@@ -23,7 +23,7 @@ public class C03_NutellaTesti {
         String acxtualKelime=aramaSonucElemneti.getText().trim();
         Assert.assertTrue(acxtualKelime.contains(expectedKelime));
 
-        Driver.closeDriver();
+        Driver.quitDriver();
 
 
     }
